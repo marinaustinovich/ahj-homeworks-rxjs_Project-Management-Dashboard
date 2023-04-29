@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/nawx7n510shyhduy/branch/main?svg=true)](https://ci.appveyor.com/project/marinaustinovich/ahj-homeworks-rxjs-project-management-dashboard/branch/main)
 
 ## Project Management Dashboard
 

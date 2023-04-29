@@ -9,7 +9,5 @@ const store = new Store();
 new Stats(container, store);
 new Tasks(container, store)
 
-// store.state$.subscribe((state) => new Tasks(container, state.projects, store));
-// store.init();
 
 
