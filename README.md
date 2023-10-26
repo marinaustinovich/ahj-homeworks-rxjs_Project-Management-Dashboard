@@ -1,8 +1,12 @@
+
+
+## Project Management Dashboard
+
+
 [![Build status](https://ci.appveyor.com/api/projects/status/nawx7n510shyhduy/branch/main?svg=true)](https://ci.appveyor.com/project/marinaustinovich/ahj-homeworks-rxjs-project-management-dashboard/branch/main)
 
 deployment: https://marinaustinovich.github.io/ahj-homeworks-rxjs_Project-Management-Dashboard/
 
-## Project Management Dashboard
 
 ### Легенда
 

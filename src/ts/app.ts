@@ -1,13 +1,12 @@
-import Stats from "./Stats";
-import Tasks from "./Tasks";
+import Stats from "./Stats/Stats";
+import Tasks from "./Tasks/Tasks";
 import Store from "./Store";
 
-/* eslint-disable */
-console.log('it works!');
-const container = document.getElementById('dashboard-container');
+const container = document.getElementById("dashboard-container");
 const store = new Store();
-new Stats(container, store);
-new Tasks(container, store)
 
+const stats = new Stats(container, store);
+const tasks = new Tasks(container, store);
 
-
+stats.init();
+tasks.init();

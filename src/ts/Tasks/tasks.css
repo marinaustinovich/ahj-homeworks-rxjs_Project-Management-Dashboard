@@ -1,0 +1,46 @@
+.tasks {
+  border: 1px solid black;
+}
+
+.tasks {
+  position: relative;
+}
+
+.done-task {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.tasks-dropdown {
+  position: absolute;
+  top: 35px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  left: 5%;
+  min-width: 70%;
+}
+
+.task-item {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid black;
+}
+
+.task-item:hover {
+  background-color: rgb(180, 230, 178);
+}
+
+.chosen-project {
+  color: green;
+  border-bottom: 1px solid black;
+}
+
+.chosen-project:hover {
+  cursor: pointer;
+  color: rgb(20, 182, 14);
+}
