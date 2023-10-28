@@ -61,22 +61,22 @@ export default class Store {
     );
   }
 
-  init() {
+  init(): void {
     this.dispatch(Actions.init, { projectId: null, taskId: null });
   }
 
   dispatch(
     type: string,
     payload: { projectId: string | null; taskId: string | null }
-  ) {
+  ): void {
     this.actions$.next({ type, payload });
   }
 
-  check(projectId: string, taskId: string) {
+  check(projectId: string, taskId: string): void {
     this.dispatch(Actions.check, { projectId, taskId });
   }
 
-  choose(projectId: string) {
+  choose(projectId: string): void {
     this.dispatch(Actions.choose, { projectId, taskId: null });
   }
 

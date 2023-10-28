@@ -7,6 +7,7 @@ export default class Tasks {
   container: HTMLElement;
   projects: Project[];
   store: Store;
+  tasksEl: HTMLElement | null;
 
   constructor(container: HTMLElement | null, store: Store) {
     if (!container) {
@@ -16,38 +17,42 @@ export default class Tasks {
     this.store = store;
     this.container = container;
     this.projects = [];
+    this.tasksEl = null;
   }
 
-  init() {
+  init(): void {
     this.start();
     this.drawUi();
   }
 
-  start() {
+  start(): void {
     this.store.state$.subscribe((state) => (this.projects = state.projects));
     this.store.init();
   }
 
-  drawUi() {
+  drawUi(): void {
     const checkedProject = this.projects.find(
       (project: Project) => project.isCheck === true
     );
-    const tasksEl = this.createTasksElement(checkedProject);
+    this.tasksEl = this.createTasksElement(checkedProject);
+    this.setupProjectListEvent();
 
-    const projectsListElement = tasksEl.querySelector(".projects-list");
-    if (projectsListElement) {
-      fromEvent(projectsListElement, "click").subscribe(() =>
-        this.showProjectsList()
-      );
-    }
-
-    this.container.appendChild(tasksEl);
+    this.container.appendChild(this.tasksEl);
     checkedProject?.tasks.forEach((task: Task) =>
       this.addTask(checkedProject.id, task)
     );
   }
 
-  createTasksElement(checkedProject: Project | undefined) {
+  setupProjectListEvent(): void {
+    const projectsListElement = this.tasksEl?.querySelector(".projects-list");
+    if (projectsListElement) {
+      fromEvent(projectsListElement, "click").subscribe(() =>
+        this.showProjectsList()
+      );
+    }
+  }
+
+  createTasksElement(checkedProject: Project | undefined): HTMLElement {
     const tasksEl = document.createElement("div");
     tasksEl.classList.add("tasks-container");
     tasksEl.innerHTML = `
@@ -67,36 +72,34 @@ export default class Tasks {
     return tasksEl;
   }
 
-  showProjectsList() {
+  showProjectsList(): void {
     const dropdown = this.createDropdown();
     document.querySelector(".tasks")?.appendChild(dropdown);
   }
 
-  createDropdown() {
+  createDropdown(): HTMLElement {
     const dropdown = document.createElement("div");
     dropdown.classList.add("tasks-dropdown");
-
-    this.projects.forEach((project) => {
-      const projectItem = document.createElement("div");
-      projectItem.classList.add("task-item");
-      projectItem.textContent = project.name;
-      projectItem.setAttribute("data-id", project.id);
-
-      fromEvent(projectItem, "click").subscribe(() => {
-        this.selectProject(project.id);
-        dropdown.parentElement?.removeChild(dropdown);
-      });
-
-      dropdown.appendChild(projectItem);
-    });
-
-    fromEvent(dropdown, "click").subscribe(() => {
-      dropdown.parentElement?.removeChild(dropdown);
-    });
+    this.projects.forEach((project) =>
+      dropdown.appendChild(this.createProjectItem(project))
+    );
+    fromEvent(dropdown, "click").subscribe(() => dropdown.remove());
     return dropdown;
   }
 
-  addTask(projectId: string, task: Task) {
+  createProjectItem(project: Project): HTMLElement {
+    const projectItem = document.createElement("div");
+    projectItem.classList.add("task-item");
+    projectItem.textContent = project.name;
+    projectItem.setAttribute("data-id", project.id);
+    fromEvent(projectItem, "click").subscribe(() => {
+      this.selectProject(project.id);
+      projectItem.parentElement?.remove();
+    });
+    return projectItem;
+  }
+
+  addTask(projectId: string, task: Task): void  {
     const projectRow = document.createElement("tr");
     projectRow.innerHTML = `
       <td><span class="done-task">${task.isDone ? "&#10004;" : ""}</span></td>
@@ -113,17 +116,17 @@ export default class Tasks {
     document.querySelector(".tasks-table-body")?.appendChild(projectRow);
   }
 
-  selectProject(projectId: string) {
+  selectProject(projectId: string): void {
     this.store.choose(projectId);
     this.redraw();
   }
 
-  doneTask(projectId: string, taskId: string) {
+  doneTask(projectId: string, taskId: string): void {
     this.store.check(projectId, taskId);
     this.redraw();
   }
 
-  redraw() {
+  redraw(): void {
     const tasksContainer = this.container.querySelector(".tasks-container");
     tasksContainer?.parentElement?.removeChild(tasksContainer);
 

@@ -15,15 +15,20 @@ export default class Stats {
     this.container = container;
   }
 
-  init() {
+  init(): void {
     this.start();
     this.drawUi();
   }
 
-  drawUi() {
-    const statssEl = document.createElement("div");
-    statssEl.classList.add("stats-container");
-    statssEl.innerHTML = `
+  drawUi(): void {
+    const statsEl = this.createStatsContainer();
+    this.container.appendChild(statsEl);
+  }
+
+  createStatsContainer(): HTMLElement {
+    const statsEl = document.createElement("div");
+    statsEl.classList.add("stats-container");
+    statsEl.innerHTML = `
       <h2>Stats</h2>
       <div class="stats">
         <table>
@@ -37,23 +42,27 @@ export default class Stats {
         </table>
       </div>
     `;
-
-    this.container.appendChild(statssEl);
+    return statsEl;
   }
 
-  start() {
-    this.store.state$.pipe().subscribe((value) => {
-      const statsTableBody = document.querySelector(".stats-table-body");
-      if (statsTableBody) {
-        statsTableBody.innerHTML = "";
-      }
+  start(): void {
+    this.store.state$.pipe().subscribe({
+      next: (value) => {
+        const statsTableBody = document.querySelector(".stats-table-body");
+        if (statsTableBody) {
+          statsTableBody.innerHTML = "";
+        }
 
-      const projects = value.projects;
-      projects.forEach((project) => this.addProject(project));
+        const projects = value.projects;
+        projects.forEach((project) => this.addProject(project));
+      },
+      error: (error) => {
+        console.error("An error occurred: ", error);
+      },
     });
   }
 
-  addProject(project: Project) {
+  addProject(project: Project): void {
     const openedTasks = project.tasks.filter((task) => task.isDone === false);
     const projectRow = document.createElement("tr");
     projectRow.innerHTML = `
